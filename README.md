@@ -1,22 +1,22 @@
 # Daily Ritual 🔥
 
-A no-nonsense habit tracking app for people who are serious about change.
+A no-bullshit habit tracking app for people who actually want to change.
 
-No coddling. No gamification. Just raw accountability.
+Built for the hardcore crowd — dark, sharp, data-forward. No coddling, no gamification fluff. Just you vs. your commitments.
 
 ---
 
 ## Features
 
-- **Daily Rituals** - Check off daily habits with streak tracking
-- **Timed Sessions** - Track focused work with countdown timer and progress persistence
-- **Weekly Targets** - Set and track weekly goals (e.g., "Gym 3x per week")
-- **Motivational Intros** - Power phrases before timed sessions to get you locked in
-- **Personal "Why"** - Set your motivation for each timed habit
-- **Calendar Heatmap** - Visual history of your consistency
-- **Stats & Streaks** - Track your performance over time
-- **Daily Review** - Evening reflection prompt
-- **Offline First** - All data stored locally, no account needed
+- **Daily Rituals** — Check off habits every day
+- **Timed Sessions** — Track time-based habits with a focused timer (study, meditation, etc.)
+- **Weekly Targets** — Set minimum weekly goals (gym 3x, BJJ 2x, etc.)
+- **Progress Persistence** — Pause a timer, close the app, resume later
+- **Motivational Intros** — Power phrases before timed sessions
+- **Personal "Why"** — Set your motivation for each timed habit
+- **Streaks & Stats** — Track your consistency ruthlessly
+- **Calendar Heatmap** — Visualize your commitment over time
+- **Daily Review** — Reflect on your day each evening
 
 ---
 
@@ -28,18 +28,19 @@ No coddling. No gamification. Just raw accountability.
 
 ## Installation
 
-### Android (Recommended)
+### Android (APK)
 
 1. Go to [Releases](../../releases)
 2. Download the latest `.apk` file
 3. Open on your Android device
-4. Tap "Install" (you may need to allow installation from unknown sources)
+4. Allow "Install from unknown sources" if prompted
+5. Install and open
 
 ### iPhone / Web (PWA)
 
-1. Visit: `[URL coming soon]`
+1. Visit: **[Coming soon]**
 2. Tap "Share" → "Add to Home Screen"
-3. Use like a native app
+3. Open from your home screen like a native app
 
 ### Development
 
@@ -55,54 +56,70 @@ npm install
 npx expo start
 
 # Scan QR code with Expo Go app (Android)
-# Or press 'w' for web version
+# Or press 'w' for web
 ```
 
 ---
 
 ## Tech Stack
 
-- **React Native** + **Expo** (SDK 53)
-- **TypeScript**
-- **AsyncStorage** for local persistence
-- **Expo Haptics** for tactile feedback
-- **date-fns** for date manipulation
+- **React Native** + **Expo** — Cross-platform mobile
+- **TypeScript** — Type safety
+- **AsyncStorage** — Local data persistence
+- **date-fns** — Date manipulation
+- **expo-haptics** — Tactile feedback
 
 ---
 
 ## Philosophy
 
-This app is designed for the "hardcore" crowd:
+This app is built on a few core beliefs:
 
-- **No streaks to maintain for the app's sake** - streaks are shown but there's no guilt-tripping
-- **No social features** - this is between you and yourself
-- **No premium tier** - everything is free and open source
-- **No data collection** - your habits stay on your device
-- **Minimal but powerful** - every feature earns its place
+1. **Tracking creates awareness** — You can't improve what you don't measure
+2. **Consistency beats intensity** — Small daily actions compound
+3. **No excuses** — The app won't coddle you or celebrate mediocrity
+4. **Privacy first** — All data stays on your device
+
+---
+
+## Roadmap
+
+See [ROADMAP.md](./ROADMAP.md) for the full development plan.
+
+### Completed
+- [x] Daily habit tracking
+- [x] Timed habit tracking with persistence
+- [x] Weekly targets
+- [x] Calendar heatmap
+- [x] Stats & streaks
+- [x] Daily review prompt
+- [x] Custom power phrases
+
+### Planned
+- [ ] Push notifications (reminders)
+- [ ] Data export/import
+- [ ] Home screen widget
 
 ---
 
 ## Contributing
 
-Contributions welcome! Please:
-
 1. Fork the repo
-2. Create a feature branch (`git checkout -b feature/awesome-thing`)
-3. Commit your changes (`git commit -m 'Add awesome thing'`)
-4. Push to the branch (`git push origin feature/awesome-thing`)
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Commit changes: `git commit -m "Add your feature"`
+4. Push: `git push origin feature/your-feature`
 5. Open a Pull Request
 
 ---
 
 ## License
 
-MIT License - do whatever you want with it.
+MIT License — do whatever you want with it.
 
 ---
 
-## Acknowledgments
+## Author
 
-Built with determination and a refusal to be average.
+Built by Tom because existing habit apps are either too gamified, too bloated, or too soft.
 
-*"Discipline equals freedom."*
-
+*"The work is the way."*
