@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Platform } from 'react-native';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import * as NavigationBar from 'expo-navigation-bar';
 import { AppProvider } from './src/context/AppContext';
 import { TodayScreen } from './src/screens/TodayScreen';
 import { CalendarScreen } from './src/screens/CalendarScreen';
@@ -82,6 +83,14 @@ const TAB_ICONS: { [key: string]: { active: TabIconName; inactive: TabIconName }
 // Inner component to access safe area insets
 function AppNavigator() {
   const insets = useSafeAreaInsets();
+  
+  // Set Android navigation bar to dark
+  useEffect(() => {
+    if (Platform.OS === 'android') {
+      NavigationBar.setBackgroundColorAsync('#0A0A0B');
+      NavigationBar.setButtonStyleAsync('light');
+    }
+  }, []);
   
   return (
     <NavigationContainer>
