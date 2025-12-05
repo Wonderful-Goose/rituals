@@ -479,13 +479,9 @@ export function TodayScreen() {
         <KeyboardAvoidingView 
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={styles.modalOverlay}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
         >
-          <ScrollView 
-            contentContainerStyle={styles.modalScrollContent}
-            keyboardShouldPersistTaps="handled"
-            showsVerticalScrollIndicator={false}
-          >
-            <View style={styles.modalContent}>
+          <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Add New Ritual</Text>
               <TouchableOpacity onPress={() => { setShowAddModal(false); resetAddForm(); }}>
@@ -585,7 +581,6 @@ export function TodayScreen() {
               <Text style={styles.saveButtonText}>Add Ritual</Text>
             </TouchableOpacity>
           </View>
-          </ScrollView>
         </KeyboardAvoidingView>
       </Modal>
 

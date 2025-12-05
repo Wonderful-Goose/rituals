@@ -459,14 +459,10 @@ export function SettingsScreen() {
         <KeyboardAvoidingView 
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={styles.modalOverlay}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
         >
-          <ScrollView 
-            contentContainerStyle={styles.modalScrollContent}
-            keyboardShouldPersistTaps="handled"
-            showsVerticalScrollIndicator={false}
-          >
-            <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>{getModalTitle()}</Text>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>{getModalTitle()}</Text>
 
             <Text style={styles.inputLabel}>NAME</Text>
             <TextInput
@@ -574,8 +570,7 @@ export function SettingsScreen() {
                 </Text>
               </TouchableOpacity>
             </View>
-            </View>
-          </ScrollView>
+          </View>
         </KeyboardAvoidingView>
       </Modal>
     </SafeAreaView>
