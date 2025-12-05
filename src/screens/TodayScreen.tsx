@@ -477,11 +477,16 @@ export function TodayScreen() {
         onRequestClose={() => setShowAddModal(false)}
       >
         <KeyboardAvoidingView 
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          behavior="padding"
           style={styles.modalOverlay}
-          keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
         >
-          <View style={styles.modalContent}>
+          <ScrollView 
+            style={styles.modalScrollView}
+            contentContainerStyle={styles.modalScrollContent}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
+            <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Add New Ritual</Text>
               <TouchableOpacity onPress={() => { setShowAddModal(false); resetAddForm(); }}>
@@ -581,6 +586,7 @@ export function TodayScreen() {
               <Text style={styles.saveButtonText}>Add Ritual</Text>
             </TouchableOpacity>
           </View>
+          </ScrollView>
         </KeyboardAvoidingView>
       </Modal>
 
@@ -947,11 +953,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
   },
+  modalScrollView: {
+    width: '100%',
+    maxWidth: 400,
+  },
   modalScrollContent: {
     flexGrow: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
   },
   modalContent: {
     backgroundColor: '#141416',

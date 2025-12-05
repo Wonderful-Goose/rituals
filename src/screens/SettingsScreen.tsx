@@ -457,11 +457,16 @@ export function SettingsScreen() {
         onRequestClose={() => setIsModalVisible(false)}
       >
         <KeyboardAvoidingView 
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          behavior="padding"
           style={styles.modalOverlay}
-          keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
         >
-          <View style={styles.modalContent}>
+          <ScrollView 
+            style={styles.modalScrollView}
+            contentContainerStyle={styles.modalScrollContent}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
+            <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>{getModalTitle()}</Text>
 
             <Text style={styles.inputLabel}>NAME</Text>
@@ -571,6 +576,7 @@ export function SettingsScreen() {
               </TouchableOpacity>
             </View>
           </View>
+          </ScrollView>
         </KeyboardAvoidingView>
       </Modal>
     </SafeAreaView>
@@ -691,11 +697,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
   },
+  modalScrollView: {
+    width: '100%',
+    maxWidth: 400,
+  },
   modalScrollContent: {
     flexGrow: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
   },
   modalContent: {
     backgroundColor: '#141416',
