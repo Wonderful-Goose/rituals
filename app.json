@@ -33,6 +33,12 @@
         "projectId": "560f85fb-424e-471c-b031-77bb20e21dba"
       }
     },
-    "owner": "goosedev89"
+    "owner": "goosedev89",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/560f85fb-424e-471c-b031-77bb20e21dba"
+    }
   }
 }
