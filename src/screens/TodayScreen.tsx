@@ -8,6 +8,8 @@ import {
   Modal,
   TextInput,
   Alert,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -19,7 +21,7 @@ import { formatDisplayDate, getToday, getStreak, getHoursUntilMidnight, isEvenin
 import { Habit, HabitType } from '../types';
 
 // Duration options for timed habits in minutes
-const DURATION_OPTIONS = [5, 10, 15, 20, 30, 45, 60, 90];
+const DURATION_OPTIONS = [5, 10, 15, 20, 30, 45, 60, 90, 120, 180, 240];
 
 // Format seconds to readable duration (e.g., "20m" or "1h 5m")
 function formatDuration(seconds: number): string {
@@ -474,8 +476,16 @@ export function TodayScreen() {
         animationType="fade"
         onRequestClose={() => setShowAddModal(false)}
       >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
+        <KeyboardAvoidingView 
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.modalOverlay}
+        >
+          <ScrollView 
+            contentContainerStyle={styles.modalScrollContent}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
+            <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Add New Ritual</Text>
               <TouchableOpacity onPress={() => { setShowAddModal(false); resetAddForm(); }}>
@@ -575,7 +585,8 @@ export function TodayScreen() {
               <Text style={styles.saveButtonText}>Add Ritual</Text>
             </TouchableOpacity>
           </View>
-        </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
       </Modal>
 
       {/* Daily Review Modal */}
@@ -940,6 +951,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
+  },
+  modalScrollContent: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
   },
   modalContent: {
     backgroundColor: '#141416',

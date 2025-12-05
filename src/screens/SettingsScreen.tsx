@@ -9,6 +9,8 @@ import {
   Alert,
   Modal,
   Switch,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
@@ -24,7 +26,7 @@ interface HabitFormData {
   why: string; // Personal motivation for this habit
 }
 
-const DURATION_OPTIONS = [5, 10, 15, 20, 30, 45, 60, 90, 120];
+const DURATION_OPTIONS = [5, 10, 15, 20, 30, 45, 60, 90, 120, 180, 240];
 
 export function SettingsScreen() {
   const { habits, addHabit, updateHabit, deleteHabit, settings, updateSettings } = useApp();
@@ -454,9 +456,17 @@ export function SettingsScreen() {
         animationType="fade"
         onRequestClose={() => setIsModalVisible(false)}
       >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>{getModalTitle()}</Text>
+        <KeyboardAvoidingView 
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.modalOverlay}
+        >
+          <ScrollView 
+            contentContainerStyle={styles.modalScrollContent}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
+            <View style={styles.modalContent}>
+              <Text style={styles.modalTitle}>{getModalTitle()}</Text>
 
             <Text style={styles.inputLabel}>NAME</Text>
             <TextInput
@@ -564,8 +574,9 @@ export function SettingsScreen() {
                 </Text>
               </TouchableOpacity>
             </View>
-          </View>
-        </View>
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
       </Modal>
     </SafeAreaView>
   );
@@ -684,6 +695,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
+  },
+  modalScrollContent: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
   },
   modalContent: {
     backgroundColor: '#141416',

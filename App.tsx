@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, Text, View } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { AppProvider } from './src/context/AppContext';
 import { TodayScreen } from './src/screens/TodayScreen';
@@ -79,36 +79,50 @@ const TAB_ICONS: { [key: string]: { active: TabIconName; inactive: TabIconName }
   Settings: { active: 'settings', inactive: 'settings-outline' },
 };
 
+// Inner component to access safe area insets
+function AppNavigator() {
+  const insets = useSafeAreaInsets();
+  
+  return (
+    <NavigationContainer>
+      <StatusBar style="light" />
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          headerShown: false,
+          tabBarStyle: {
+            ...styles.tabBar,
+            // Add padding for devices with gesture navigation / home indicator
+            paddingBottom: insets.bottom > 0 ? insets.bottom : 8,
+            height: 56 + (insets.bottom > 0 ? insets.bottom : 8),
+          },
+          tabBarActiveTintColor: '#FF3B30',
+          tabBarInactiveTintColor: '#5A5A5E',
+          tabBarLabelStyle: styles.tabBarLabel,
+          tabBarIcon: ({ focused, color, size }) => {
+            const icons = TAB_ICONS[route.name];
+            const iconName = focused ? icons.active : icons.inactive;
+            return <Ionicons name={iconName} size={24} color={color} />;
+          },
+        })}
+      >
+        <Tab.Screen name="Today" component={TodayScreen} />
+        <Tab.Screen name="Calendar" component={CalendarScreen} />
+        <Tab.Screen name="Stats" component={StatsScreen} />
+        <Tab.Screen name="Settings" component={SettingsScreen} />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+}
+
 export default function App() {
   return (
     <SafeAreaProvider>
       <ErrorBoundary>
         <AppProvider>
-          <NavigationContainer>
-            <StatusBar style="light" />
-            <Tab.Navigator
-            screenOptions={({ route }) => ({
-              headerShown: false,
-              tabBarStyle: styles.tabBar,
-              tabBarActiveTintColor: '#FF3B30',
-              tabBarInactiveTintColor: '#5A5A5E',
-              tabBarLabelStyle: styles.tabBarLabel,
-              tabBarIcon: ({ focused, color, size }) => {
-                const icons = TAB_ICONS[route.name];
-                const iconName = focused ? icons.active : icons.inactive;
-                return <Ionicons name={iconName} size={24} color={color} />;
-              },
-            })}
-          >
-            <Tab.Screen name="Today" component={TodayScreen} />
-            <Tab.Screen name="Calendar" component={CalendarScreen} />
-            <Tab.Screen name="Stats" component={StatsScreen} />
-            <Tab.Screen name="Settings" component={SettingsScreen} />
-          </Tab.Navigator>
-        </NavigationContainer>
-      </AppProvider>
-    </ErrorBoundary>
-  </SafeAreaProvider>
+          <AppNavigator />
+        </AppProvider>
+      </ErrorBoundary>
+    </SafeAreaProvider>
   );
 }
 
