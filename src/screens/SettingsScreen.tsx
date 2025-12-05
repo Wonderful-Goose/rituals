@@ -183,7 +183,7 @@ export function SettingsScreen() {
 
           {dailyHabits.length === 0 ? (
             <View style={styles.emptySection}>
-              <Text style={styles.emptyText}>No daily habits yet</Text>
+              <Text style={styles.emptyText}>No daily rituals yet</Text>
             </View>
           ) : (
             <View style={styles.habitsList}>
@@ -209,7 +209,7 @@ export function SettingsScreen() {
 
           {timedHabits.length === 0 ? (
             <View style={styles.emptySection}>
-              <Text style={styles.emptyText}>No timed habits yet</Text>
+              <Text style={styles.emptyText}>No timed rituals yet</Text>
             </View>
           ) : (
             <View style={styles.habitsList}>

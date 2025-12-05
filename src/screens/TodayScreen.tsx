@@ -269,10 +269,10 @@ export function TodayScreen() {
             activeOpacity={0.8}
           >
             <View style={styles.reviewPromptContent}>
-              <Text style={styles.reviewPromptIcon}>📝</Text>
+              <Text style={styles.reviewPromptIcon}>◉</Text>
               <View style={styles.reviewPromptText}>
-                <Text style={styles.reviewPromptTitle}>How was today?</Text>
-                <Text style={styles.reviewPromptSubtitle}>Take a moment to reflect on your progress</Text>
+                <Text style={styles.reviewPromptTitle}>Evening Examination</Text>
+                <Text style={styles.reviewPromptSubtitle}>Review your discipline before day's end</Text>
               </View>
             </View>
             <TouchableOpacity 
@@ -588,7 +588,7 @@ export function TodayScreen() {
         <View style={styles.modalOverlay}>
           <View style={styles.reviewModalContent}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>How was today?</Text>
+              <Text style={styles.modalTitle}>Evening Examination</Text>
               <TouchableOpacity onPress={() => setShowReviewModal(false)}>
                 <Ionicons name="close" size={24} color="#8A8A8E" />
               </TouchableOpacity>
@@ -614,28 +614,28 @@ export function TodayScreen() {
                   }}
                 >
                   <Text style={[
-                    styles.ratingEmoji,
-                    reviewRating === rating ? styles.ratingEmojiActive : null,
+                    styles.ratingNumber,
+                    reviewRating === rating ? styles.ratingNumberActive : null,
                   ]}>
-                    {rating === 1 ? '😞' : rating === 2 ? '😐' : rating === 3 ? '🙂' : rating === 4 ? '😊' : '🔥'}
+                    {rating}
                   </Text>
                   <Text style={[
                     styles.ratingLabel,
                     reviewRating === rating ? styles.ratingLabelActive : null,
                   ]}>
-                    {rating === 1 ? 'Rough' : rating === 2 ? 'Meh' : rating === 3 ? 'Okay' : rating === 4 ? 'Good' : 'Great'}
+                    {rating === 1 ? 'Failed' : rating === 2 ? 'Poor' : rating === 3 ? 'Adequate' : rating === 4 ? 'Strong' : 'Excellent'}
                   </Text>
                 </TouchableOpacity>
               ))}
             </View>
 
             {/* Note */}
-            <Text style={styles.inputLabel}>REFLECTION (OPTIONAL)</Text>
+            <Text style={styles.inputLabel}>EVENING EXAMINATION</Text>
             <TextInput
               style={[styles.input, styles.reviewNoteInput]}
               value={reviewNote}
               onChangeText={setReviewNote}
-              placeholder="What went well? What could improve?"
+              placeholder="Where did I fall short? What will I do differently tomorrow?"
               placeholderTextColor="#5A5A5E"
               multiline={true}
             />
@@ -1183,12 +1183,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(88, 86, 214, 0.2)',
     borderColor: '#5856D6',
   },
-  ratingEmoji: {
+  ratingNumber: {
     fontSize: 24,
+    fontWeight: 'bold',
+    fontFamily: 'monospace',
+    color: '#5A5A5E',
     marginBottom: 4,
   },
-  ratingEmojiActive: {
-    transform: [{ scale: 1.1 }],
+  ratingNumberActive: {
+    color: '#FF3B30',
   },
   ratingLabel: {
     color: '#5A5A5E',

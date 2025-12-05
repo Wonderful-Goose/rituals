@@ -155,7 +155,7 @@ export function StatsScreen() {
         {/* Weekly Review Card - Shows insights */}
         <View style={styles.weeklyReviewCard}>
           <View style={styles.weeklyReviewHeader}>
-            <Text style={styles.weeklyReviewTitle}>📊 Weekly Review</Text>
+            <Text style={styles.weeklyReviewTitle}>Weekly Review</Text>
             <Text style={styles.weeklyReviewLabel}>THIS WEEK</Text>
           </View>
           
@@ -192,12 +192,12 @@ export function StatsScreen() {
           <View style={styles.weeklyInsight}>
             <Text style={styles.weeklyInsightText}>
               {stats.weekRate >= 0.9 
-                ? "🔥 Outstanding week. You're building unstoppable momentum." 
+                ? "You did what you said you would. This is who you're becoming." 
                 : stats.weekRate >= 0.7 
-                  ? "💪 Solid week. Keep pushing, you're on the right track."
+                  ? "Solid discipline. Not perfect. What slipped?"
                   : stats.weekRate >= 0.5 
-                    ? "⚡ Decent progress. Time to step it up next week."
-                    : "🎯 Room for improvement. What's one thing you can change?"}
+                    ? `You committed to ${stats.totalDailyHabits} daily rituals. You're hitting about half. Is this acceptable to you?`
+                    : `Below 50%. Be honest: what's getting in the way? Fix it or lower your commitments.`}
             </Text>
           </View>
         </View>
