@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -6,10 +6,13 @@ import {
   TouchableOpacity,
   Dimensions,
   Platform,
+  AppState,
+  AppStateStatus,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import * as NavigationBar from 'expo-navigation-bar';
+import { useKeepAwake } from 'expo-keep-awake';
 import { useApp } from '../context/AppContext';
 
 const { width } = Dimensions.get('window');
@@ -126,6 +129,40 @@ export function TimerScreen({ onClose }: TimerScreenProps) {
 
   const { habitName, targetDuration, elapsedTime, isRunning, isPaused } = timerState;
 
+  // Keep screen awake while timer is active
+  useKeepAwake();
+
+  // Focus mode: track when user leaves and returns
+  const [awayTime, setAwayTime] = useState(0);
+  const [showAwayWarning, setShowAwayWarning] = useState(false);
+  const leftAtRef = useRef<number | null>(null);
+  const totalAwayRef = useRef(0);
+
+  // Track app state for focus mode
+  useEffect(() => {
+    const handleAppStateChange = (nextState: AppStateStatus) => {
+      if (nextState === 'background' || nextState === 'inactive') {
+        // User left the app - record the time
+        leftAtRef.current = Date.now();
+      } else if (nextState === 'active' && leftAtRef.current && !isPaused) {
+        // User returned while timer was running
+        const awayDuration = Math.floor((Date.now() - leftAtRef.current) / 1000);
+        if (awayDuration >= 3) { // Only count if away for 3+ seconds
+          totalAwayRef.current += awayDuration;
+          setAwayTime(totalAwayRef.current);
+          setShowAwayWarning(true);
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+          // Hide warning after 3 seconds
+          setTimeout(() => setShowAwayWarning(false), 3000);
+        }
+        leftAtRef.current = null;
+      }
+    };
+
+    const subscription = AppState.addEventListener('change', handleAppStateChange);
+    return () => subscription?.remove();
+  }, [isPaused]);
+
   // Ensure navigation bar stays dark on this screen
   useEffect(() => {
     if (Platform.OS === 'android') {
@@ -207,6 +244,13 @@ export function TimerScreen({ onClose }: TimerScreenProps) {
           </View>
         </View>
 
+        {/* Focus break warning */}
+        {showAwayWarning && (
+          <View style={styles.awayWarning}>
+            <Text style={styles.awayWarningText}>Focus broken. Stay present.</Text>
+          </View>
+        )}
+
         {/* Stats */}
         <View style={styles.stats}>
           <View style={styles.statItem}>
@@ -218,6 +262,15 @@ export function TimerScreen({ onClose }: TimerScreenProps) {
             <Text style={styles.statValue}>{formatTime(targetDuration)}</Text>
             <Text style={styles.statLabel}>Target</Text>
           </View>
+          {awayTime > 0 && (
+            <>
+              <View style={styles.statDivider} />
+              <View style={styles.statItem}>
+                <Text style={styles.statValueWarning}>{formatTime(awayTime)}</Text>
+                <Text style={styles.statLabel}>Distracted</Text>
+              </View>
+            </>
+          )}
         </View>
 
         {/* Controls */}
@@ -365,6 +418,27 @@ const styles = StyleSheet.create({
     width: 1,
     height: 40,
     backgroundColor: '#2C2C2E',
+  },
+  statValueWarning: {
+    color: '#FF9500',
+    fontSize: 20,
+    fontFamily: 'monospace',
+    fontWeight: 'bold',
+  },
+  awayWarning: {
+    backgroundColor: 'rgba(255, 149, 0, 0.2)',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 10,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: '#FF9500',
+  },
+  awayWarningText: {
+    color: '#FF9500',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   controls: {
     flexDirection: 'row',
