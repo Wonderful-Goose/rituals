@@ -5,9 +5,11 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
+  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
+import * as NavigationBar from 'expo-navigation-bar';
 import { useApp } from '../context/AppContext';
 
 const { width } = Dimensions.get('window');
@@ -123,6 +125,14 @@ export function TimerScreen({ onClose }: TimerScreenProps) {
   } = useApp();
 
   const { habitName, targetDuration, elapsedTime, isRunning, isPaused } = timerState;
+
+  // Ensure navigation bar stays dark on this screen
+  useEffect(() => {
+    if (Platform.OS === 'android') {
+      NavigationBar.setBackgroundColorAsync('#0A0A0B');
+      NavigationBar.setButtonStyleAsync('light');
+    }
+  }, []);
   
   const remainingTime = Math.max(0, targetDuration - elapsedTime);
   const progress = targetDuration > 0 ? Math.min(elapsedTime / targetDuration, 1) : 0;

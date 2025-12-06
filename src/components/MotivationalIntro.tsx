@@ -6,8 +6,10 @@ import {
   Animated,
   Dimensions,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
+import * as NavigationBar from 'expo-navigation-bar';
 
 const { width, height } = Dimensions.get('window');
 
@@ -55,6 +57,14 @@ export function MotivationalIntro({
   const opacity = useRef(new Animated.Value(0)).current;
   const scale = useRef(new Animated.Value(0.8)).current;
   const habitOpacity = useRef(new Animated.Value(0)).current;
+
+  // Ensure navigation bar stays dark on this screen
+  useEffect(() => {
+    if (Platform.OS === 'android') {
+      NavigationBar.setBackgroundColorAsync('#0A0A0B');
+      NavigationBar.setButtonStyleAsync('light');
+    }
+  }, []);
   
   // Use custom phrases if any exist, otherwise use defaults
   const phrasesToUse = customPhrases.length > 0 ? customPhrases : DEFAULT_PHRASES;
