@@ -694,11 +694,10 @@ const styles = StyleSheet.create({
   // Brand
   brandTitle: {
     color: '#FF3B30',
-    fontSize: 13,
-    fontWeight: 'bold',
-    letterSpacing: 6,
-    marginBottom: 24,
-    opacity: 0.9,
+    fontSize: 24,
+    fontWeight: '300',
+    letterSpacing: 12,
+    marginBottom: 32,
   },
   // Hero
   hero: {
