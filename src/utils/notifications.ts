@@ -89,6 +89,72 @@ export async function scheduleEveningReminder(hour: number, minute: number): Pro
   }
 }
 
+// Schedule streak alert (afternoon reminder to check streaks)
+export async function scheduleStreakAlert(hour: number, minute: number): Promise<string | null> {
+  try {
+    await cancelNotificationsByTag('streak-alert');
+    
+    const identifier = await Notifications.scheduleNotificationAsync({
+      content: {
+        title: '🔥 Check your streaks',
+        body: 'Don\'t let them break. You\'ve worked hard.',
+        data: { type: 'streak-alert', tag: 'streak-alert' },
+      },
+      trigger: {
+        hour,
+        minute,
+        repeats: true,
+      },
+    });
+    
+    return identifier;
+  } catch (error) {
+    console.error('Error scheduling streak alert:', error);
+    return null;
+  }
+}
+
+// Schedule incomplete reminder (evening nudge if not done)
+export async function scheduleIncompleteReminder(hour: number, minute: number): Promise<string | null> {
+  try {
+    await cancelNotificationsByTag('incomplete');
+    
+    const identifier = await Notifications.scheduleNotificationAsync({
+      content: {
+        title: '📋 Rituals incomplete',
+        body: 'The day isn\'t over yet. Finish what you started.',
+        data: { type: 'incomplete', tag: 'incomplete' },
+      },
+      trigger: {
+        hour,
+        minute,
+        repeats: true,
+      },
+    });
+    
+    return identifier;
+  } catch (error) {
+    console.error('Error scheduling incomplete reminder:', error);
+    return null;
+  }
+}
+
+// Send completion celebration (immediate)
+export async function sendCompletionCelebration(): Promise<void> {
+  try {
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: '✓ All rituals complete',
+        body: 'You did what you said you would. This is who you\'re becoming.',
+        data: { type: 'celebration' },
+      },
+      trigger: null, // Immediate
+    });
+  } catch (error) {
+    console.error('Error sending completion celebration:', error);
+  }
+}
+
 // Cancel notifications by tag
 async function cancelNotificationsByTag(tag: string): Promise<void> {
   const scheduled = await Notifications.getAllScheduledNotificationsAsync();
@@ -129,7 +195,13 @@ export function parseTimeString(time: string): { hour: number; minute: number } 
 export async function setupNotifications(
   enabled: boolean,
   morningTime: string,
-  eveningTime: string
+  eveningTime: string,
+  options?: {
+    streakAlertEnabled?: boolean;
+    streakAlertTime?: string;
+    incompleteReminderEnabled?: boolean;
+    incompleteReminderTime?: string;
+  }
 ): Promise<void> {
   if (!enabled) {
     await cancelAllNotifications();
@@ -146,5 +218,25 @@ export async function setupNotifications(
   
   await scheduleMorningReminder(morning.hour, morning.minute);
   await scheduleEveningReminder(evening.hour, evening.minute);
+  
+  // Additional notifications
+  if (options?.streakAlertEnabled && options?.streakAlertTime) {
+    const streakTime = parseTimeString(options.streakAlertTime);
+    await scheduleStreakAlert(streakTime.hour, streakTime.minute);
+  } else {
+    await cancelNotificationsByTag('streak-alert');
+  }
+  
+  if (options?.incompleteReminderEnabled && options?.incompleteReminderTime) {
+    const incompleteTime = parseTimeString(options.incompleteReminderTime);
+    await scheduleIncompleteReminder(incompleteTime.hour, incompleteTime.minute);
+  } else {
+    await cancelNotificationsByTag('incomplete');
+  }
+}
+
+// Export cancel function for external use
+export async function cancelNotificationByTag(tag: string): Promise<void> {
+  await cancelNotificationsByTag(tag);
 }
 

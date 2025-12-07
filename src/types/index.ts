@@ -72,6 +72,12 @@ export interface UserSettings {
   notificationsEnabled: boolean;
   morningReminderTime: string; // HH:mm format
   eveningReminderTime: string; // HH:mm format
+  // Additional notification options
+  streakAlertEnabled: boolean;
+  streakAlertTime: string; // HH:mm format - afternoon alert for streaks
+  incompleteReminderEnabled: boolean;
+  incompleteReminderTime: string; // HH:mm format - evening reminder if not done
+  completionCelebrationEnabled: boolean; // Celebrate when all done
 }
 
 // Daily review/reflection entry

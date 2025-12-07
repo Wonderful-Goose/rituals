@@ -16,6 +16,11 @@ const DEFAULT_SETTINGS: UserSettings = {
   notificationsEnabled: false,
   morningReminderTime: '08:00',
   eveningReminderTime: '21:00',
+  streakAlertEnabled: false,
+  streakAlertTime: '15:00',
+  incompleteReminderEnabled: false,
+  incompleteReminderTime: '21:00',
+  completionCelebrationEnabled: true,
 };
 
 // Habits

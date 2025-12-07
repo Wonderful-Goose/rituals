@@ -350,7 +350,12 @@ export function SettingsScreen() {
                         async (text) => {
                           if (text && /^\d{1,2}:\d{2}$/.test(text)) {
                             updateSettings({ morningReminderTime: text });
-                            await setupNotifications(true, text, settings.eveningReminderTime);
+                            await setupNotifications(true, text, settings.eveningReminderTime, {
+                              streakAlertEnabled: settings.streakAlertEnabled,
+                              streakAlertTime: settings.streakAlertTime,
+                              incompleteReminderEnabled: settings.incompleteReminderEnabled,
+                              incompleteReminderTime: settings.incompleteReminderTime,
+                            });
                           }
                         },
                         'plain-text',
@@ -379,7 +384,12 @@ export function SettingsScreen() {
                         async (text) => {
                           if (text && /^\d{1,2}:\d{2}$/.test(text)) {
                             updateSettings({ eveningReminderTime: text });
-                            await setupNotifications(true, settings.morningReminderTime, text);
+                            await setupNotifications(true, settings.morningReminderTime, text, {
+                              streakAlertEnabled: settings.streakAlertEnabled,
+                              streakAlertTime: settings.streakAlertTime,
+                              incompleteReminderEnabled: settings.incompleteReminderEnabled,
+                              incompleteReminderTime: settings.incompleteReminderTime,
+                            });
                           }
                         },
                         'plain-text',
@@ -389,6 +399,143 @@ export function SettingsScreen() {
                   >
                     <Text style={styles.timeButtonText}>{settings.eveningReminderTime}</Text>
                   </TouchableOpacity>
+                </View>
+
+                {/* Divider */}
+                <View style={styles.notificationDivider} />
+                <Text style={styles.notificationSectionLabel}>ADDITIONAL ALERTS</Text>
+
+                {/* Streak Alert */}
+                <View style={styles.notificationRow}>
+                  <View style={styles.notificationRowContent}>
+                    <Text style={styles.notificationRowTitle}>🔥 Streak Alert</Text>
+                    <Text style={styles.notificationRowDesc}>
+                      Afternoon reminder to protect streaks
+                    </Text>
+                  </View>
+                  <Switch
+                    value={settings.streakAlertEnabled}
+                    onValueChange={async (value) => {
+                      updateSettings({ streakAlertEnabled: value });
+                      await setupNotifications(true, settings.morningReminderTime, settings.eveningReminderTime, {
+                        streakAlertEnabled: value,
+                        streakAlertTime: settings.streakAlertTime,
+                        incompleteReminderEnabled: settings.incompleteReminderEnabled,
+                        incompleteReminderTime: settings.incompleteReminderTime,
+                      });
+                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    }}
+                    trackColor={{ false: '#2C2C2E', true: 'rgba(255, 59, 48, 0.4)' }}
+                    thumbColor={settings.streakAlertEnabled ? '#FF3B30' : '#5A5A5E'}
+                  />
+                </View>
+
+                {settings.streakAlertEnabled && (
+                  <View style={styles.notificationRow}>
+                    <View style={styles.notificationRowContent}>
+                      <Text style={styles.notificationRowSubTitle}>Alert Time</Text>
+                    </View>
+                    <TouchableOpacity
+                      style={styles.timeButton}
+                      onPress={() => {
+                        Alert.prompt(
+                          'Streak Alert Time',
+                          'Enter time (HH:MM in 24h format)',
+                          async (text) => {
+                            if (text && /^\d{1,2}:\d{2}$/.test(text)) {
+                              updateSettings({ streakAlertTime: text });
+                              await setupNotifications(true, settings.morningReminderTime, settings.eveningReminderTime, {
+                                streakAlertEnabled: true,
+                                streakAlertTime: text,
+                                incompleteReminderEnabled: settings.incompleteReminderEnabled,
+                                incompleteReminderTime: settings.incompleteReminderTime,
+                              });
+                            }
+                          },
+                          'plain-text',
+                          settings.streakAlertTime
+                        );
+                      }}
+                    >
+                      <Text style={styles.timeButtonText}>{settings.streakAlertTime}</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+
+                {/* Incomplete Reminder */}
+                <View style={styles.notificationRow}>
+                  <View style={styles.notificationRowContent}>
+                    <Text style={styles.notificationRowTitle}>📋 Incomplete Reminder</Text>
+                    <Text style={styles.notificationRowDesc}>
+                      Evening nudge if rituals aren't done
+                    </Text>
+                  </View>
+                  <Switch
+                    value={settings.incompleteReminderEnabled}
+                    onValueChange={async (value) => {
+                      updateSettings({ incompleteReminderEnabled: value });
+                      await setupNotifications(true, settings.morningReminderTime, settings.eveningReminderTime, {
+                        streakAlertEnabled: settings.streakAlertEnabled,
+                        streakAlertTime: settings.streakAlertTime,
+                        incompleteReminderEnabled: value,
+                        incompleteReminderTime: settings.incompleteReminderTime,
+                      });
+                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    }}
+                    trackColor={{ false: '#2C2C2E', true: 'rgba(255, 59, 48, 0.4)' }}
+                    thumbColor={settings.incompleteReminderEnabled ? '#FF3B30' : '#5A5A5E'}
+                  />
+                </View>
+
+                {settings.incompleteReminderEnabled && (
+                  <View style={styles.notificationRow}>
+                    <View style={styles.notificationRowContent}>
+                      <Text style={styles.notificationRowSubTitle}>Reminder Time</Text>
+                    </View>
+                    <TouchableOpacity
+                      style={styles.timeButton}
+                      onPress={() => {
+                        Alert.prompt(
+                          'Incomplete Reminder Time',
+                          'Enter time (HH:MM in 24h format)',
+                          async (text) => {
+                            if (text && /^\d{1,2}:\d{2}$/.test(text)) {
+                              updateSettings({ incompleteReminderTime: text });
+                              await setupNotifications(true, settings.morningReminderTime, settings.eveningReminderTime, {
+                                streakAlertEnabled: settings.streakAlertEnabled,
+                                streakAlertTime: settings.streakAlertTime,
+                                incompleteReminderEnabled: true,
+                                incompleteReminderTime: text,
+                              });
+                            }
+                          },
+                          'plain-text',
+                          settings.incompleteReminderTime
+                        );
+                      }}
+                    >
+                      <Text style={styles.timeButtonText}>{settings.incompleteReminderTime}</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+
+                {/* Completion Celebration */}
+                <View style={styles.notificationRow}>
+                  <View style={styles.notificationRowContent}>
+                    <Text style={styles.notificationRowTitle}>✓ Completion Alert</Text>
+                    <Text style={styles.notificationRowDesc}>
+                      Notify when all rituals are done
+                    </Text>
+                  </View>
+                  <Switch
+                    value={settings.completionCelebrationEnabled}
+                    onValueChange={(value) => {
+                      updateSettings({ completionCelebrationEnabled: value });
+                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    }}
+                    trackColor={{ false: '#2C2C2E', true: 'rgba(255, 59, 48, 0.4)' }}
+                    thumbColor={settings.completionCelebrationEnabled ? '#FF3B30' : '#5A5A5E'}
+                  />
                 </View>
               </>
             )}
@@ -923,5 +1070,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     fontFamily: 'monospace',
+  },
+  notificationDivider: {
+    height: 1,
+    backgroundColor: '#2C2C2E',
+    marginVertical: 12,
+  },
+  notificationSectionLabel: {
+    color: '#5A5A5E',
+    fontSize: 11,
+    fontWeight: 'bold',
+    letterSpacing: 1,
+    marginBottom: 12,
+    marginLeft: 16,
+  },
+  notificationRowSubTitle: {
+    color: '#8A8A8E',
+    fontSize: 14,
   },
 });

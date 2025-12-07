@@ -9,6 +9,7 @@ import {
   loadDailyReviews, saveDailyReviews,
 } from '../utils/storage';
 import { formatDate, getWeekStart, getWeekEnd, getToday, isStreakAtRisk, getStreak } from '../utils/date';
+import { sendCompletionCelebration } from '../utils/notifications';
 
 // Simple ID generator (uuid was causing Android issues)
 function generateId(): string {
@@ -95,6 +96,11 @@ const initialSettings: UserSettings = {
   notificationsEnabled: false,
   morningReminderTime: '08:00',
   eveningReminderTime: '21:00',
+  streakAlertEnabled: false,
+  streakAlertTime: '15:00',
+  incompleteReminderEnabled: false,
+  incompleteReminderTime: '21:00',
+  completionCelebrationEnabled: true,
 };
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
@@ -372,10 +378,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     const existing = completions.find(c => c.habitId === habitId && c.date === date);
     
     let newCompletions: CompletionRecord[];
+    let isAddingCompletion = false;
     
     if (existing) {
       newCompletions = completions.filter(c => !(c.habitId === habitId && c.date === date));
     } else {
+      isAddingCompletion = true;
       const newCompletion: CompletionRecord = {
         habitId,
         date,
@@ -388,7 +396,18 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setCompletions(newCompletions);
     // Immediately save to prevent data loss on app close
     saveCompletions(newCompletions);
-  }, [completions]);
+
+    // Check if all daily rituals are now complete (for celebration notification)
+    if (isAddingCompletion && settings.completionCelebrationEnabled && settings.notificationsEnabled) {
+      const dailyHabits = habits.filter(h => (h.type === 'daily' || h.type === 'timed') && !h.archived);
+      const allComplete = dailyHabits.every(h => 
+        newCompletions.some(c => c.habitId === h.id && c.date === date)
+      );
+      if (allComplete && dailyHabits.length > 0) {
+        sendCompletionCelebration();
+      }
+    }
+  }, [completions, habits, settings.completionCelebrationEnabled, settings.notificationsEnabled]);
 
   const isCompleted = useCallback((habitId: string, date: string) => {
     return completions.some(c => c.habitId === habitId && c.date === date);
