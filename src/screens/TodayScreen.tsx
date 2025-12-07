@@ -206,6 +206,9 @@ export function TodayScreen() {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
+        {/* Brand Header */}
+        <Text style={styles.brandTitle}>RITUALS</Text>
+
         {/* Hero Section */}
         <View style={styles.hero}>
           <Text style={styles.date}>{formatDisplayDate(today)}</Text>
@@ -687,6 +690,15 @@ const styles = StyleSheet.create({
   loadingText: {
     color: '#5A5A5E',
     fontSize: 16,
+  },
+  // Brand
+  brandTitle: {
+    color: '#FF3B30',
+    fontSize: 13,
+    fontWeight: 'bold',
+    letterSpacing: 6,
+    marginBottom: 24,
+    opacity: 0.9,
   },
   // Hero
   hero: {

@@ -101,8 +101,9 @@ function AppNavigator() {
           tabBarStyle: {
             ...styles.tabBar,
             // Add padding for devices with gesture navigation / home indicator
-            paddingBottom: insets.bottom > 0 ? insets.bottom : 8,
-            height: 56 + (insets.bottom > 0 ? insets.bottom : 8),
+            // Extra 4px ensures tab labels aren't cut off
+            paddingBottom: insets.bottom > 0 ? insets.bottom + 4 : 10,
+            height: 60 + (insets.bottom > 0 ? insets.bottom : 10),
           },
           tabBarActiveTintColor: '#FF3B30',
           tabBarInactiveTintColor: '#5A5A5E',

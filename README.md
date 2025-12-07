@@ -1,4 +1,4 @@
-# Daily Ritual 🔥
+# Rituals
 
 A no-bullshit habit tracking app for people who actually want to change.
 
