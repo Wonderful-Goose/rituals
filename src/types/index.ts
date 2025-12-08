@@ -1,4 +1,5 @@
 export type HabitType = 'daily' | 'weekly' | 'timed';
+export type TimerEndSound = 'vibration' | 'bell' | 'both';
 
 export interface Habit {
   id: string;
@@ -78,6 +79,8 @@ export interface UserSettings {
   incompleteReminderEnabled: boolean;
   incompleteReminderTime: string; // HH:mm format - evening reminder if not done
   completionCelebrationEnabled: boolean; // Celebrate when all done
+  // Timer settings
+  timerEndSound: TimerEndSound; // What to play when timer completes
 }
 
 // Daily review/reflection entry

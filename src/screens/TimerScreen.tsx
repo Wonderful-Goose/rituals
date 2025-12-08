@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -12,6 +12,7 @@ import * as Haptics from 'expo-haptics';
 import * as NavigationBar from 'expo-navigation-bar';
 import { useKeepAwake } from 'expo-keep-awake';
 import { useApp } from '../context/AppContext';
+import { playTimerEndFeedback, loadBellSound } from '../utils/sound';
 
 const { width } = Dimensions.get('window');
 const CIRCLE_SIZE = width * 0.7;
@@ -142,13 +143,22 @@ export function TimerScreen({ onClose }: TimerScreenProps) {
   const progress = targetDuration > 0 ? Math.min(elapsedTime / targetDuration, 1) : 0;
   const isComplete = elapsedTime >= targetDuration;
   const isOvertime = elapsedTime > targetDuration;
+  const hasPlayedEndSound = useRef(false);
 
-  // Haptic feedback when timer completes
+  // Load bell sound on mount
   useEffect(() => {
-    if (isComplete && elapsedTime === targetDuration) {
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    if (settings.timerEndSound === 'bell' || settings.timerEndSound === 'both') {
+      loadBellSound();
     }
-  }, [isComplete, elapsedTime, targetDuration]);
+  }, [settings.timerEndSound]);
+
+  // Play feedback when timer completes (only once)
+  useEffect(() => {
+    if (isComplete && !hasPlayedEndSound.current) {
+      hasPlayedEndSound.current = true;
+      playTimerEndFeedback(settings.timerEndSound);
+    }
+  }, [isComplete, settings.timerEndSound]);
 
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(Math.abs(seconds) / 60);

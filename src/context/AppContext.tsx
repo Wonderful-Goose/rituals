@@ -101,6 +101,7 @@ const initialSettings: UserSettings = {
   incompleteReminderEnabled: false,
   incompleteReminderTime: '21:00',
   completionCelebrationEnabled: true,
+  timerEndSound: 'vibration',
 };
 
 export function AppProvider({ children }: { children: React.ReactNode }) {

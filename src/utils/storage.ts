@@ -21,6 +21,7 @@ const DEFAULT_SETTINGS: UserSettings = {
   incompleteReminderEnabled: false,
   incompleteReminderTime: '21:00',
   completionCelebrationEnabled: true,
+  timerEndSound: 'vibration',
 };
 
 // Habits

@@ -287,6 +287,77 @@ export function SettingsScreen() {
           </View>
         </View>
 
+        {/* Timer Section */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <View>
+              <Text style={styles.sectionTitle}>TIMER</Text>
+              <Text style={styles.sectionDesc}>Timed session settings</Text>
+            </View>
+          </View>
+
+          <View style={styles.notificationsCard}>
+            <View style={styles.notificationRow}>
+              <View style={styles.notificationRowContent}>
+                <Text style={styles.notificationRowTitle}>Session End Alert</Text>
+                <Text style={styles.notificationRowDesc}>
+                  How to notify when timer completes
+                </Text>
+              </View>
+            </View>
+            
+            <View style={styles.timerSoundOptions}>
+              <TouchableOpacity
+                style={[
+                  styles.timerSoundOption,
+                  settings.timerEndSound === 'vibration' && styles.timerSoundOptionActive,
+                ]}
+                onPress={() => {
+                  updateSettings({ timerEndSound: 'vibration' });
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                }}
+              >
+                <Text style={[
+                  styles.timerSoundOptionText,
+                  settings.timerEndSound === 'vibration' && styles.timerSoundOptionTextActive,
+                ]}>Vibration</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity
+                style={[
+                  styles.timerSoundOption,
+                  settings.timerEndSound === 'bell' && styles.timerSoundOptionActive,
+                ]}
+                onPress={() => {
+                  updateSettings({ timerEndSound: 'bell' });
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                }}
+              >
+                <Text style={[
+                  styles.timerSoundOptionText,
+                  settings.timerEndSound === 'bell' && styles.timerSoundOptionTextActive,
+                ]}>Bell</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity
+                style={[
+                  styles.timerSoundOption,
+                  settings.timerEndSound === 'both' && styles.timerSoundOptionActive,
+                ]}
+                onPress={() => {
+                  updateSettings({ timerEndSound: 'both' });
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                }}
+              >
+                <Text style={[
+                  styles.timerSoundOptionText,
+                  settings.timerEndSound === 'both' && styles.timerSoundOptionTextActive,
+                ]}>Both</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+
         {/* Notifications Section */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
@@ -1087,5 +1158,32 @@ const styles = StyleSheet.create({
   notificationRowSubTitle: {
     color: '#8A8A8E',
     fontSize: 14,
+  },
+  timerSoundOptions: {
+    flexDirection: 'row',
+    gap: 10,
+    paddingHorizontal: 16,
+    paddingBottom: 16,
+  },
+  timerSoundOption: {
+    flex: 1,
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+    borderRadius: 8,
+    backgroundColor: '#1C1C1E',
+    alignItems: 'center',
+  },
+  timerSoundOptionActive: {
+    backgroundColor: 'rgba(255, 59, 48, 0.2)',
+    borderWidth: 1,
+    borderColor: '#FF3B30',
+  },
+  timerSoundOptionText: {
+    color: '#8A8A8E',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  timerSoundOptionTextActive: {
+    color: '#FF3B30',
   },
 });
