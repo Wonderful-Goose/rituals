@@ -123,7 +123,8 @@ export function TimerScreen({ onClose }: TimerScreenProps) {
     pauseTimer, 
     resumeTimer, 
     stopTimer, 
-    completeTimer 
+    completeTimer,
+    settings,
   } = useApp();
 
   const { habitName, targetDuration, elapsedTime, isRunning, isPaused } = timerState;
